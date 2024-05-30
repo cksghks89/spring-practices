@@ -1,16 +1,20 @@
 package com.poscodx.hellospring.controller;
 
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
+import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class HelloController {
-	
+
 	@RequestMapping("/hello")
-	public String hello() {
+	public String hello(HttpServletRequest request, String name) {
+		System.out.println(name);
+		System.out.println(request.getParameter("name") + "-=");
+
 		return "/WEB-INF/views/hello.jsp";
 	}
 }
