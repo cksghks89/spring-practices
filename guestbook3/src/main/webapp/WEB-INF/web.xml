@@ -3,8 +3,8 @@
 	xmlns="http://java.sun.com/xml/ns/javaee"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
-	<display-name>emaillist3</display-name>
-
+	<display-name>guestbook3</display-name>
+	
 	<!-- Context Parameters -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -50,6 +50,7 @@
 		<servlet-name>dispatcher-servlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+
 
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
