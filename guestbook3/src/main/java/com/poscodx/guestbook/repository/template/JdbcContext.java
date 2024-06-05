@@ -20,7 +20,7 @@ public class JdbcContext {
 	public <T> T executeQueryForObject(String sql) {
 		return null;
 	}
-	
+
 	public <T> List<T> executeQueryForObject(String sql, Object[] paramter) {
 		return null;
 	}
@@ -54,15 +54,12 @@ public class JdbcContext {
 	}
 
 	public int executeUpdate(String sql, Object[] parameters) {
-		return executeUpdateWithStatementStrategy(new StatementStrategy() {
-			@Override
-			public PreparedStatement makeStatement(Connection connection) throws SQLException {
-				PreparedStatement pstmt = connection.prepareStatement(sql);
-				for (int i = 0; i < parameters.length; i++) {
-					pstmt.setObject(i + 1, parameters[i]);
-				}
-				return pstmt;
+		return executeUpdateWithStatementStrategy((connection) -> {
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			for (int i = 0; i < parameters.length; i++) {
+				pstmt.setObject(i + 1, parameters[i]);
 			}
+			return pstmt;
 		});
 	}
 
