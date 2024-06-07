@@ -10,9 +10,8 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Component;
-
-import com.poscodx.guestbook.vo.GuestbookVo;
 
 @Component
 public class JdbcContext {
@@ -30,14 +29,6 @@ public class JdbcContext {
 		}, rowMapper);
 	}
 
-	public <T> T executeQueryForObject(String sql) {
-		return null;
-	}
-
-	public <T> List<T> executeQueryForObject(String sql, Object[] paramter) {
-		return null;
-	}
-
 	public int update(StatementStrategy statementStrategy) {
 		int result = 0;
 
@@ -45,18 +36,18 @@ public class JdbcContext {
 		PreparedStatement pstmt = null;
 
 		try {
-			conn = dataSource.getConnection();
+			conn = DataSourceUtils.getConnection(dataSource);
 			pstmt = statementStrategy.makeStatement(conn);
 			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
-			System.out.println("Error:" + e);
+			throw new RuntimeException(e);
 		} finally {
 			try {
 				if (pstmt != null) {
 					pstmt.close();
 				}
 				if (conn != null) {
-					conn.close();
+					DataSourceUtils.releaseConnection(conn, dataSource);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -84,7 +75,7 @@ public class JdbcContext {
 		ResultSet rs = null;
 
 		try {
-			conn = dataSource.getConnection();
+			conn = DataSourceUtils.getConnection(dataSource);
 
 			pstmt = statementStrategy.makeStatement(conn);
 			rs = pstmt.executeQuery();
@@ -92,19 +83,18 @@ public class JdbcContext {
 			while (rs.next()) {
 				E t = rowMapper.mapRow(rs, rs.getRow());
 				result.add(t);
-			}			
+			}
 		} catch (SQLException e) {
-			System.out.println("Error:" + e);
+			throw new RuntimeException(e);
 		} finally {
 			try {
 				if (pstmt != null) {
 					pstmt.close();
 				}
 				if (conn != null) {
-					conn.close();
+					DataSourceUtils.releaseConnection(conn, dataSource);
 				}
-			} catch (SQLException e) {
-				e.printStackTrace();
+			} catch (SQLException ignored) {
 			}
 		}
 
@@ -118,21 +108,20 @@ public class JdbcContext {
 		PreparedStatement pstmt = null;
 
 		try {
-			conn = dataSource.getConnection();
+			conn = DataSourceUtils.getConnection(dataSource);
 			pstmt = statementStrategy.makeStatement(conn);
 			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
-			System.out.println("Error:" + e);
+			throw new RuntimeException(e);
 		} finally {
 			try {
 				if (pstmt != null) {
 					pstmt.close();
 				}
 				if (conn != null) {
-					conn.close();
+					DataSourceUtils.releaseConnection(conn, dataSource);
 				}
-			} catch (SQLException e) {
-				e.printStackTrace();
+			} catch (SQLException ignored) {
 			}
 		}
 

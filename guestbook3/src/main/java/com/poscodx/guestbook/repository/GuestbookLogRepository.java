@@ -23,7 +23,7 @@ public class GuestbookLogRepository {
 
 	public int update(Long no) {
 		return jdbcContext.update(
-				"update guestbook_log set count = count - 1 where date = (select date(reg_date) from guestbook where no = 41)",
-				new Object[0]);
+				"update guestbook_log set count = count - 1 where date = (select date(reg_date) from guestbook where no = ?)",
+				new Object[] {no});
 	}
 }
