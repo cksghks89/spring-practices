@@ -13,24 +13,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.poscodx.guestbook.repository.GuestbookRepository;
 import com.poscodx.guestbook.repository.GuestbookRepositoryWithJdbcTemplate;
 import com.poscodx.guestbook.repository.GuestbookRepositoryWithRawJdbc;
+import com.poscodx.guestbook.service.GuestbookService;
 import com.poscodx.guestbook.vo.GuestbookVo;
 
 @Controller
 @RequestMapping("/")
 public class GuestbookController {
 	@Autowired
-	private GuestbookRepository guestbookRepository;
+	private GuestbookService guestbookService;
 	
 	@RequestMapping("/")
 	public String list(Model model) {
-		List<GuestbookVo> list = guestbookRepository.findAll();
-		model.addAttribute("list", list);
+		model.addAttribute("list", guestbookService.getContentsList());
 		return "index";
 	}
 	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public String add(GuestbookVo vo) {
-		guestbookRepository.insert(vo);
+		guestbookService.addContents(vo);
 		return "redirect:/";
 	}
 	
@@ -42,7 +42,7 @@ public class GuestbookController {
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public String delete(GuestbookVo vo) {
-		guestbookRepository.deleteByNoAndPassword(vo.getNo(), vo.getPassword());
+		guestbookService.deleteContents(vo.getNo(), vo.getPassword());
 		return "redirect:/";
 	}
 	
